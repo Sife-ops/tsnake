@@ -1,4 +1,6 @@
-// todo: levels
+// todo:
+// levels
+// players
 
 import Game from "./Game";
 

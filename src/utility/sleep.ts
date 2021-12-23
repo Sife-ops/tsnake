@@ -1,4 +1,4 @@
-export default function sleep(ms: number) {
+export default function(ms: number) {
   return new Promise((res) => {
     setTimeout(res, ms);
   });
