@@ -1,11 +1,13 @@
 import { terminal } from "terminal-kit";
 
 import Snake from "./Snake";
+import sleep from "./utility/sleep";
 
 export default class Game {
   private width: number;
   private height: number;
   private snake: Snake;
+  // todo: food
   private dead: boolean = false;
 
   constructor() {
@@ -62,12 +64,6 @@ export default class Game {
   }
 
   public async run(): Promise<void> {
-    function sleep(ms: number) {
-      return new Promise((res) => {
-        setTimeout(res, ms);
-      });
-    }
-
     this.render();
 
     while (!this.dead) {

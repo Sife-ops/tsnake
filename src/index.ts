@@ -1,3 +1,5 @@
+// todo: levels
+
 import Game from "./Game";
 
 function main() {
