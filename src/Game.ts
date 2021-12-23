@@ -9,7 +9,7 @@ export default class Game {
   private width: number;
   private height: number;
   private snake: Snake;
-  private food: Array<Point>;
+  private food: Array<Point> = [];
   private dead: boolean;
 
   constructor() {
@@ -18,7 +18,6 @@ export default class Game {
     this.snake = new Snake(this.width, this.height);
 
     const items: number = (this.width * this.height) / 200;
-    this.food = [];
     for (let i = 0; i < items; i++) {
       this.newFood();
     }
@@ -114,6 +113,7 @@ export default class Game {
 
       if (this.ate()) {
         this.snake.setEating(true);
+        // todo: remove food
         this.newFood();
       }
 

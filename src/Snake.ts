@@ -2,14 +2,13 @@ import Direction from "./Direction";
 import Point from "./Point";
 
 export default class Snake {
-  private body: Array<Point>;
+  private body: Array<Point> = [];
   private eating: boolean;
   private facing: Direction;
 
   constructor(w: number, h: number) {
     h = h / 2;
     w = w / 2;
-    this.body = [];
     for (let i = 0; i < 3; i++) {
       this.body.push(new Point(w - i, h));
     }
