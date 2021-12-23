@@ -6,14 +6,14 @@ export default class Snake {
   private eating: boolean = false;
   private facing: Direction = Direction.Right;
 
-  // todo: position relative
-  constructor() {
-    this.body = [
-      //
-      new Point(5, 5),
-      new Point(4, 5),
-      new Point(3, 5),
-    ];
+  constructor(w: number, h: number) {
+    h = h / 2;
+    w = w / 2;
+
+    this.body = [];
+    for (let i = 0; i < 3; i++) {
+      this.body.push(new Point(w - i, h));
+    }
   }
 
   public getBody(): Array<Point> {
@@ -49,9 +49,11 @@ export default class Snake {
 
   public move(): void {
     this.body.unshift(this.translate());
-    if (!this.eating) {
-      this.body.pop();
+    if (this.eating) {
+      this.eating = false;
+      return;
     }
+    this.body.pop();
   }
 
   public hitSelf(): boolean {
@@ -63,4 +65,3 @@ export default class Snake {
     return false;
   }
 }
-

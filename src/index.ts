@@ -1,11 +1,8 @@
-import Point from "./Point";
-import Snake from "./Snake";
+import Game from "./Game";
 
 function main() {
-  const p = new Point(1, 2);
-  const s = new Snake();
-
-  console.log(s.hitSelf())
+  let game = new Game();
+  game.run();
 }
 
 main();
