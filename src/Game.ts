@@ -1,5 +1,6 @@
 import { terminal } from "terminal-kit";
 
+import Direction from "./Direction";
 import Point from "./Point";
 import Snake from "./Snake";
 import random from "./utility/random";
@@ -10,31 +11,23 @@ export default class Game {
   private height: number;
   private snake: Snake;
   private food: Array<Point> = [];
-  private dead: boolean;
+  private dead: boolean = false;
 
   constructor() {
     this.width = terminal.width;
     this.height = terminal.height;
     this.snake = new Snake(this.width, this.height);
-
-    const items: number = (this.width * this.height) / 200;
+    const items: number = (this.width * this.height) / 20;
     for (let i = 0; i < items; i++) {
       this.newFood();
     }
-
-    this.dead = false;
   }
 
-  private ate(): boolean {
-    // todo: move to Point
+  private hitFood(): boolean {
     const h: Point = this.snake.getHead();
-    const x1: number = h.getx();
-    const y1: number = h.gety();
     const f: Array<Point> = this.food;
     for (let i = 0; i < f.length; i++) {
-      const x2: number = f[i].getx();
-      const y2: number = f[i].gety();
-      if (x1 == x2 && y1 == y2) {
+      if (f[i].equalTo(h)) {
         return true;
       }
     }
@@ -92,7 +85,7 @@ export default class Game {
     const h = this.snake.getHead();
     const x = h.getx();
     const y = h.gety();
-    if (x < 1 || x >= this.width - 1 || y < 1 || y >= this.height - 1) {
+    if (x < 2 || x >= this.width - 1 || y < 2 || y >= this.height - 1) {
       return true;
     }
     return false;
@@ -101,8 +94,41 @@ export default class Game {
   public async run(): Promise<void> {
     this.render();
 
+    terminal.grabInput({});
+
+    function terminate() {
+      terminal.grabInput(false);
+      setTimeout(function () {
+        process.exit();
+      }, 100);
+    }
+
     while (!this.dead) {
-      await sleep(200);
+      // todo: change game speed
+      for (let i = 0; i < 10; i++) {
+        terminal.on("key", (name: string) => {
+          switch (name) {
+            case "CTRL_C":
+              terminate();
+              break;
+            case "UP":
+              this.snake.setFacing(Direction.Up);
+              break;
+            case "DOWN":
+              this.snake.setFacing(Direction.Down);
+              break;
+            case "LEFT":
+              this.snake.setFacing(Direction.Left);
+              break;
+            case "RIGHT":
+              this.snake.setFacing(Direction.Right);
+              break;
+            default:
+              break;
+          }
+        });
+        await sleep(10);
+      }
 
       this.snake.move();
 
@@ -111,9 +137,18 @@ export default class Game {
         continue;
       }
 
-      if (this.ate()) {
+      if (this.hitFood()) {
         this.snake.setEating(true);
-        // todo: remove food
+
+        this.food = this.food.filter((e) => {
+          const x = this.snake.getHead().getx();
+          const y = this.snake.getHead().gety();
+          if (x === e.getx() && y === e.gety()) {
+            return false;
+          }
+          return true;
+        });
+
         this.newFood();
       }
 
@@ -122,5 +157,6 @@ export default class Game {
 
     // todo: game over screen
     terminal.clear();
+    terminal.grabInput(false);
   }
 }

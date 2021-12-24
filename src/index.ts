@@ -1,7 +1,3 @@
-// todo:
-// levels
-// players
-
 import Game from "./Game";
 
 function main() {

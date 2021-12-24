@@ -29,6 +29,36 @@ export default class Snake {
     this.eating = b;
   }
 
+  public getFacing(): Direction {
+    return this.facing;
+  }
+
+  public setFacing(d: Direction): void {
+    switch (this.facing) {
+      case Direction.Up:
+        if (d === Direction.Down) {
+          return;
+        }
+        break;
+      case Direction.Down:
+        if (d === Direction.Up) {
+          return;
+        }
+        break;
+      case Direction.Left:
+        if (d === Direction.Right) {
+          return;
+        }
+        break;
+      case Direction.Right:
+        if (d === Direction.Left) {
+          return;
+        }
+        break;
+    }
+    this.facing = d;
+  }
+
   private translate(): Point {
     const h: Point = this.getHead();
     let x: number = h.getx();
@@ -64,8 +94,10 @@ export default class Snake {
   public hitSelf(): boolean {
     let h: Point = this.getHead();
     let b: Array<Point> = this.getBody().slice(1);
-    if (b.includes(h)) {
-      return true;
+    for (let i = 0; i < b.length; i++) {
+      if (b[i].equalTo(h)) {
+        return true;
+      }
     }
     return false;
   }

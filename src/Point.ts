@@ -18,7 +18,7 @@ export default class Point {
     if (v < 0) {
       return;
     }
-    this.x = v;
+    this.y = v;
   }
 
   public getx(): number {
@@ -28,5 +28,13 @@ export default class Point {
   public gety(): number {
     return this.y;
   }
-}
 
+  public equalTo(p: Point): boolean {
+    const x: number = p.getx();
+    const y: number = p.gety();
+    if (x === this.x && y === this.y) {
+      return true;
+    }
+    return false;
+  }
+}
